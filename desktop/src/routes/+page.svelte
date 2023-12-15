@@ -4,17 +4,21 @@
 	let isLoading = false;
 	let isLoggedIn = false;
 
+	// Define a reactive statement that runs when the component first renders
 	onMount(async () => {
 		const response = await fetch('http://localhost:3000/login', {
 			credentials: 'include'
 		});
 		const data = await response.json();
+		// Update the message and isLoggedIn variables with the data from the response
 		message = await data.message;
 		isLoggedIn = data.isLoggedIn;
 	});
 
 	async function login() {
+		// Set isLoading to true to indicate that the login process has started
 		isLoading = true;
+		// Fetch data from the server
 		const response = await fetch('http://localhost:3000/login', {
 			method: 'POST',
 			headers: {
@@ -28,6 +32,7 @@
 		});
 
 		const data = await response.json();
+		// Update the message and isLoggedIn variables with the data from the response
 		message = await data.message;
 		isLoggedIn = data.isLoggedIn;
 	}

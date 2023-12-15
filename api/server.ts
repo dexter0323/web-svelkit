@@ -58,6 +58,7 @@ router.get('/login', async (ctx) => {
   const origin = ctx.request.headers.origin;
 
   if (session && session.user) {
+    // Check if the user is already logged in
     ctx.body = {
       isLoggedIn: true,
       user: session.user,
@@ -66,21 +67,29 @@ router.get('/login', async (ctx) => {
       )}`,
     };
   } else {
+    // If the user is not logged in, return a response indicating that the user is not logged in
     ctx.body = { isLoggedIn: false };
   }
 });
 
+// Define a route for logging in
 router.post('/login', async (ctx) => {
+  // Extract the username and password from the request body
   const { username, password } = ctx.request.body as {
     username: string;
     password: string;
   };
 
+  // Create a user object with the provided username and password
   const user = { id: 1, name: 'John Doe', username, password };
+  // Get the origin of the request
   const origin = ctx.request.headers.origin;
 
+  // If a session exists for the user
   if (ctx.session) {
+    // Store the user object in the session
     ctx.session.user = user;
+    // Return a response indicating that the user is logged in
     ctx.body = {
       isLoggedIn: true,
       user,
@@ -89,8 +98,10 @@ router.post('/login', async (ctx) => {
   }
 });
 
+// Use the defined routes and allowed methods in the Koa application
 app.use(router.routes()).use(router.allowedMethods());
 
+// Start the Koa server on the specified port
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
 });
